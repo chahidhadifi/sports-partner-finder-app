@@ -1,5 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
+import { CircleUserRound } from 'lucide-react'
 
 function Navbar() {
   return (
@@ -101,25 +102,31 @@ function Navbar() {
             <a className="py-2 px-2.5 inline-flex items-center font-medium text-sm rounded-lg bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:bg-blue-600" href="#">
               Get started
             </a>
-            <div className='pl-5'>
+            <div className='pl-[30px]'>
+              <div className='hs-dark-mode cursor-pointer hs-dark-mode-active:text-gray-50 hs-dark-mode-active:hover:bg-neutral-700 inline-flex items-center gap-x-2 py-2 px-3 rounded-full text-sm hover:bg-gray-50 focus:outline-none'>
+                <Image className='rounded-lg' height={16} width={16} alt='user-profile' src={'https://img.freepik.com/photos-gratuite/portrait-homme-riant_23-2148859448.jpg?size=338&ext=jpg&ga=GA1.1.2008272138.1725840000&semt=ais_hybrid'} />
+              </div>
+              <div className="hs-dark-mode cursor-pointer hs-dark-mode-active:text-gray-50 hs-dark-mode-active:hover:bg-neutral-700 inline-flex items-center gap-x-2 py-2 px-3 rounded-full text-sm hover:bg-gray-50 focus:outline-none">
+                <CircleUserRound size={16} />
+              </div>
               <button type="button" className="hs-dark-mode hs-dark-mode-active:hidden inline-flex items-center gap-x-2 py-2 px-3 rounded-full text-sm hover:bg-gray-50 focus:outline-none" data-hs-theme-click-value="dark">
-              <svg className="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
-              </svg>
-            </button>
-            <button type="button" className="hs-dark-mode hs-dark-mode-active:inline-flex hidden items-center gap-x-2 py-2 px-3 rounded-full text-sm hover:bg-neutral-700 focus:outline-none text-gray-800 dark:text-white" data-hs-theme-click-value="light">
-              <svg className="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="4"></circle>
-                <path d="M12 2v2"></path>
-                <path d="M12 20v2"></path>
-                <path d="m4.93 4.93 1.41 1.41"></path>
-                <path d="m17.66 17.66 1.41 1.41"></path>
-                <path d="M2 12h2"></path>
-                <path d="M20 12h2"></path>
-                <path d="m6.34 17.66-1.41 1.41"></path>
-                <path d="m19.07 4.93-1.41 1.41"></path>
-              </svg>
-            </button>
+                <svg className="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+                </svg>
+              </button>
+              <button type="button" className="hs-dark-mode hs-dark-mode-active:inline-flex hidden items-center gap-x-2 py-2 px-3 rounded-full text-sm hover:bg-neutral-700 focus:outline-none text-gray-800 dark:text-white" data-hs-theme-click-value="light">
+                <svg className="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="4"></circle>
+                  <path d="M12 2v2"></path>
+                  <path d="M12 20v2"></path>
+                  <path d="m4.93 4.93 1.41 1.41"></path>
+                  <path d="m17.66 17.66 1.41 1.41"></path>
+                  <path d="M2 12h2"></path>
+                  <path d="M20 12h2"></path>
+                  <path d="m6.34 17.66-1.41 1.41"></path>
+                  <path d="m19.07 4.93-1.41 1.41"></path>
+                </svg>
+              </button>
             </div>
           </div>
         </div>
