@@ -1,20 +1,7 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
 import "./globals.css";
 
-import PrelineScript from "./components/PrelineScript";
 import SessionWrapper from "./components/SessionWrapper";
-
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
 
 export const metadata: Metadata = {
   title: "SportsPartner",
@@ -29,13 +16,8 @@ export default function RootLayout({
   return (
     <SessionWrapper>
       <html lang="en">
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        >
-          {children}
-        </body>
-      <PrelineScript />
-    </html>
+        <body className="light">{children}</body>
+      </html>
     </SessionWrapper>
   );
 }

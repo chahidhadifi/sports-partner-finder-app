@@ -1,12 +1,15 @@
-import React from 'react'
-import Navbar from './components/Navbar'
+import Hero from "./components/Hero";
+import Navbar from "./components/Navbar";
+import LearnMore from "./components/LearnMore";
+import SearchByType from "./components/SearchType";
 
-function page() {
+export default function page() {
   return (
-    <div>
-      <Navbar />
-    </div>
-  )
+    <>
+      <Navbar currentPage="Home" />
+      <Hero />
+      <LearnMore />
+      <SearchByType />
+    </>
+  );
 }
-
-export default page

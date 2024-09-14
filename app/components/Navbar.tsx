@@ -1,98 +1,313 @@
-'use client'
+"use client";
 
-import React from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
+import React, { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 
-import { CircleUserRound } from 'lucide-react'
-import Logo from '../public/images/logo.png'
-import { useSession, signIn, signOut } from 'next-auth/react'
+import { useSession, signIn, signOut } from "next-auth/react";
 
-function Navbar() {
+export default function Navbar({ currentPage }: { currentPage: string }) {
   const { data: session } = useSession();
+
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target as Node)
+    ) {
+      setIsOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   return (
-    <div>
-    <header className="flex flex-wrap  md:justify-start md:flex-nowrap z-50 w-full bg-white border-b border-gray-200 dark:bg-neutral-800 dark:border-neutral-700">
-    <nav className="relative max-w-[85rem] w-full mx-auto md:flex md:items-center md:justify-between md:gap-3 py-2 px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center gap-x-1">
-        <Link className="flex items-center flex-row font-semibold text-xl text-black focus:outline-none focus:opacity-80 dark:text-white" href="/" aria-label="Logo">
-          <Image src={Logo} alt='logo' width={20} height={20} />
-          <p className='pl-2'>SportsPartner</p>
-        </Link>
-
-        <button type="button" className="hs-collapse-toggle md:hidden relative size-9 flex justify-center items-center font-medium text-[12px] rounded-lg border border-gray-200 text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:border-neutral-700 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700" id="hs-header-base-collapse"  aria-expanded="false" aria-controls="hs-header-base" aria-label="Toggle navigation"  data-hs-collapse="#hs-header-base" >
-            <svg className="hs-collapse-open:hidden size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" x2="21" y1="6" y2="6"/><line x1="3" x2="21" y1="12" y2="12"/><line x1="3" x2="21" y1="18" y2="18"/></svg>
-            <svg className="hs-collapse-open:block shrink-0 hidden size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-            <span className="sr-only">Toggle navigation</span>
-        </button>
-    </div>
-
-    <div id="hs-header-base" className="hs-collapse hidden overflow-hidden transition-all duration-300 basis-full grow md:block "  aria-labelledby="hs-header-base-collapse" >
-      <div className="overflow-hidden overflow-y-auto max-h-[75vh] [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500">
-        <div className="py-2 md:py-0  flex flex-col md:flex-row md:items-center gap-0.5 md:gap-1">
-          <div className="grow"></div>
-            
-          <div className="flex flex-wrap items-center gap-x-1.5">
-            {
-              !session ?
-              (
-                <Link onClick={() => {signIn('google')}} className="py-[7px] px-2.5 inline-flex items-center font-medium text-sm rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 focus:outline-none focus:bg-gray-100 dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700" href="/">
-                  Sign in
-                </Link>
-              ) :
-              (
-                <Link onClick={() => {signOut()}} className="py-[7px] px-2.5 inline-flex items-center font-medium text-sm rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 focus:outline-none focus:bg-gray-100 dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700" href="/">
-                  Sign out
-                </Link>
-              )
-            }
-            <Link className="py-2 px-2.5 inline-flex items-center font-medium text-sm rounded-lg bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:bg-blue-600" href="/">
-              Get started
-            </Link>
-          </div>
-          <div className="my-2 md:my-0 md:mx-2">
-            <div className="w-full h-px md:w-px md:h-4 bg-gray-100 md:bg-gray-300 dark:bg-neutral-700"></div>
-          </div>
-          <div>
-              {
-                !session ?
-                (
-                  <div className="hs-dark-mode cursor-pointer hs-dark-mode-active:text-gray-50 hs-dark-mode-active:hover:bg-neutral-700 inline-flex items-center gap-x-2 py-2 px-3 rounded-full text-sm hover:bg-gray-50 focus:outline-none">
-                    <CircleUserRound size={16} />
-                  </div>
-                ) :
-                (
-                  <div className='hs-dark-mode cursor-pointer hs-dark-mode-active:text-gray-50 hs-dark-mode-active:hover:bg-neutral-700 inline-flex items-center gap-x-2 py-2 px-3 rounded-full text-sm hover:bg-gray-50 focus:outline-none'>
-                    <Image className='rounded-lg' height={16} width={16} alt='user-profile' src={'https://img.freepik.com/photos-gratuite/portrait-homme-riant_23-2148859448.jpg?size=338&ext=jpg&ga=GA1.1.2008272138.1725840000&semt=ais_hybrid'} />
-                  </div>
-                )
-              }
-              <button type="button" className="hs-dark-mode hs-dark-mode-active:hidden inline-flex items-center gap-x-2 py-2 px-3 rounded-full text-sm hover:bg-gray-50 focus:outline-none" data-hs-theme-click-value="dark">
-                <svg className="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+    <>
+      <header className="p-4 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-100">
+        <div className="container flex justify-between h-16 mx-auto">
+          <Link
+            rel="noopener noreferrer"
+            href="/"
+            aria-label="Back to homepage"
+            className="flex items-center p-2"
+          >
+            <p className="text-lime-600 text-xl dark:text-lime-400 logo">
+              SportsPartner
+            </p>
+          </Link>
+          <ul className="items-stretch hidden space-x-3 lg:flex">
+            <li className="flex">
+              <Link
+                rel="noopener noreferrer"
+                href="/"
+                className={
+                  "flex items-center px-4 -mb-1 " +
+                  (currentPage == "Home"
+                    ? "border-b-2 border-solid text-lime-600  border-lime-600"
+                    : "")
+                }
+              >
+                Home
+              </Link>
+            </li>
+            <li className="flex">
+              <Link
+                rel="noopener noreferrer"
+                href="/about"
+                className={
+                  "flex items-center px-4 -mb-1 " +
+                  (currentPage == "About"
+                    ? "border-b-2 text-lime-600  border-lime-600"
+                    : "")
+                }
+              >
+                About
+              </Link>
+            </li>
+            <li className="flex">
+              <Link
+                rel="noopener noreferrer"
+                href="/contact"
+                className={
+                  "flex items-center px-4 -mb-1 " +
+                  (currentPage == "Contact"
+                    ? "border-b-2 text-lime-600  border-lime-600"
+                    : "")
+                }
+              >
+                Contact
+              </Link>
+            </li>
+          </ul>
+          <div className="items-center flex-shrink-0 hidden lg:flex">
+            {!session ? (
+              <button
+                className="flex flex-row items-center self-center px-8 py-3 font-semibold rounded bg-lime-600 dark:bg-lime-400 text-gray-50 dark:text-gray-900"
+                onClick={() => {
+                  signIn("google");
+                }}
+              >
+                <svg
+                  stroke="currentColor"
+                  fill="currentColor"
+                  strokeWidth="0"
+                  version="1.1"
+                  x="0px"
+                  y="0px"
+                  viewBox="0 0 48 48"
+                  enableBackground="new 0 0 48 48"
+                  className="h-6 w-6 mr-[8px]"
+                  height="1em"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill="#FFC107"
+                    d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12
+	c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24
+	c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"
+                  ></path>
+                  <path
+                    fill="#FF3D00"
+                    d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657
+	C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"
+                  ></path>
+                  <path
+                    fill="#4CAF50"
+                    d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36
+	c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"
+                  ></path>
+                  <path
+                    fill="#1976D2"
+                    d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571
+	c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"
+                  ></path>
                 </svg>
+                Sign in
               </button>
-              <button type="button" className="hs-dark-mode hs-dark-mode-active:inline-flex hidden items-center gap-x-2 py-2 px-3 rounded-full text-sm hover:bg-neutral-700 focus:outline-none text-gray-800 dark:text-white" data-hs-theme-click-value="light">
-                <svg className="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="4"></circle>
-                  <path d="M12 2v2"></path>
-                  <path d="M12 20v2"></path>
-                  <path d="m4.93 4.93 1.41 1.41"></path>
-                  <path d="m17.66 17.66 1.41 1.41"></path>
-                  <path d="M2 12h2"></path>
-                  <path d="M20 12h2"></path>
-                  <path d="m6.34 17.66-1.41 1.41"></path>
-                  <path d="m19.07 4.93-1.41 1.41"></path>
+            ) : (
+              <button
+                className="flex flex-row items-center self-center px-8 py-3 font-semibold rounded bg-lime-600 dark:bg-lime-400 text-gray-50 dark:text-gray-900"
+                onClick={() => {
+                  signOut();
+                }}
+              >
+                <svg
+                  stroke="currentColor"
+                  fill="currentColor"
+                  strokeWidth="0"
+                  version="1.1"
+                  x="0px"
+                  y="0px"
+                  viewBox="0 0 48 48"
+                  enableBackground="new 0 0 48 48"
+                  className="h-6 w-6 mr-[8px]"
+                  height="1em"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill="#FFC107"
+                    d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12
+	c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24
+	c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"
+                  ></path>
+                  <path
+                    fill="#FF3D00"
+                    d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657
+	C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"
+                  ></path>
+                  <path
+                    fill="#4CAF50"
+                    d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36
+	c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"
+                  ></path>
+                  <path
+                    fill="#1976D2"
+                    d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571
+	c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"
+                  ></path>
                 </svg>
+                Sign out
               </button>
-            </div>
+            )}
+          </div>
+          <div className="relative inline-block lg:hidden">
+            <button onClick={() => setIsOpen(!isOpen)} className="p-4">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                className="w-6 h-6 text-gray-800 dark:text-gray-100"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M4 6h16M4 12h16M4 18h16"
+                ></path>
+              </svg>
+            </button>
+            {isOpen && (
+              <div
+                ref={dropdownRef}
+                className={`absolute right-0 z-20 w-80 py-2 mt-2 origin-top-right bg-gray-50 rounded-md shadow-xl dark:bg-gray-800 transition-transform duration-100 ${
+                  isOpen ? "opacity-100 scale-100" : "opacity-0 scale-90"
+                }`}
+              >
+                {!session ? (
+                  <div>
+                    <Link
+                      href="/"
+                      className="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+                    >
+                      Home
+                    </Link>
+                    <Link
+                      href="/about"
+                      className="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+                    >
+                      About
+                    </Link>
+                    <Link
+                      href="/contact"
+                      className="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+                    >
+                      Contact
+                    </Link>
+                    <hr className="border-gray-200 dark:border-gray-700" />
+                    <Link
+                      href="/"
+                      className="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+                      onClick={() => signIn("google")}
+                    >
+                      Sign in
+                    </Link>
+                  </div>
+                ) : (
+                  <div>
+                    <a
+                      href="#"
+                      className="flex items-center p-3 -mt-2 text-sm text-gray-600 transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+                    >
+                      <img
+                        className="flex-shrink-0 object-cover mx-1 rounded-full w-9 h-9"
+                        src="https://images.unsplash.com/photo-1523779917675-b6ed3a42a561?ixid=MnwxMjA3fDB8MHxzZWFyY2h8N3x8d29tYW4lMjBibHVlfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=face&w=500&q=200"
+                        alt="jane avatar"
+                      />
+                      <div className="mx-1">
+                        <h1 className="text-sm font-semibold text-gray-700 dark:text-gray-200">
+                          Jane Doe
+                        </h1>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                          janedoe@exampl.com
+                        </p>
+                      </div>
+                    </a>
+
+                    <hr className="border-gray-200 dark:border-gray-700 "></hr>
+                    <a
+                      href="#"
+                      className="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+                    >
+                      view profile
+                    </a>
+                    <a
+                      href="#"
+                      className="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+                    >
+                      Settings
+                    </a>
+                    <a
+                      href="#"
+                      className="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+                    >
+                      Keyboard shortcuts
+                    </a>
+                    <hr className="border-gray-200 dark:border-gray-700" />
+                    <a
+                      href="#"
+                      className="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+                    >
+                      Company profile
+                    </a>
+                    <a
+                      href="#"
+                      className="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+                    >
+                      Team
+                    </a>
+                    <a
+                      href="#"
+                      className="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+                    >
+                      Invite colleagues
+                    </a>
+                    <hr className="border-gray-200 dark:border-gray-700" />
+                    <a
+                      href="#"
+                      className="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+                    >
+                      Help
+                    </a>
+                    <a
+                      href="#"
+                      className="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+                    >
+                      Sign Out
+                    </a>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         </div>
-      </div>
-    </div>
-  </nav>
-</header>
-    </div>
-  )
+      </header>
+    </>
+  );
 }
-
-export default Navbar
