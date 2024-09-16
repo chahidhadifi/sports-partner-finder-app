@@ -1,8 +1,16 @@
 "use client";
 
+import Link from "next/link";
 import HeroImg from "../public/images/refer-a-friend.png";
+import { signIn, useSession } from "next-auth/react";
 
-export default function Hero() {
+export default function Hero({
+  scrollToSection: propHero,
+}: {
+  scrollToSection: any;
+}) {
+  const { data: session } = useSession();
+
   return (
     <>
       <section className="bg-gray-100 text-gray-800">
@@ -18,20 +26,31 @@ export default function Hero() {
               enthusiasts who share your passion.
             </p>
             <div className="flex flex-col space-y-4 sm:items-center sm:justify-center sm:flex-row sm:space-y-0 sm:space-x-4 lg:justify-start">
-              <a
+              <button
                 rel="noopener noreferrer"
-                href="#GetStarted"
                 className="px-8 py-3 text-lg font-semibold rounded bg-lime-600 text-gray-50"
+                onClick={propHero}
               >
                 Get Started
-              </a>
-              <a
-                rel="noopener noreferrer"
-                href="#"
-                className="px-8 py-3 text-lg font-semibold border rounded border-gray-800"
-              >
-                Malesuada
-              </a>
+              </button>
+              {!session ? (
+                <Link
+                  rel="noopener noreferrer"
+                  href="/"
+                  onClick={() => signIn("google")}
+                  className="px-8 py-3 text-lg font-semibold border rounded border-gray-800"
+                >
+                  New Invitation
+                </Link>
+              ) : (
+                <Link
+                  rel="noopener noreferrer"
+                  href="/new-invitation"
+                  className="px-8 py-3 text-lg font-semibold border rounded border-gray-800"
+                >
+                  New Invitation
+                </Link>
+              )}
             </div>
           </div>
           <div className="flex items-center justify-center p-6 mt-8 lg:mt-0 h-72 sm:h-80 lg:h-96 xl:h-112 2xl:h-128">

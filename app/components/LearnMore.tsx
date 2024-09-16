@@ -23,7 +23,7 @@ export default function LearnMore() {
             </li>
             <li>
               Explore local sports activities and teams by searching for
-              specific games or sports you’re interested in.
+              specific games or sports you're interested in.
             </li>
           </ul>
           <button className="px-8 py-3 text-lg font-semibold rounded bg-gray-100 text-gray-900">

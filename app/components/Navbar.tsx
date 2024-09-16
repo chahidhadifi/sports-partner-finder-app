@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
 import { useSession, signIn, signOut } from "next-auth/react";
+import { LogOut } from "lucide-react";
 
 export default function Navbar({ currentPage }: { currentPage: string }) {
   const { data: session } = useSession();
@@ -130,50 +131,33 @@ export default function Navbar({ currentPage }: { currentPage: string }) {
                 Sign in
               </button>
             ) : (
-              <button
-                className="flex flex-row items-center self-center px-8 py-3 font-semibold rounded bg-lime-600 dark:bg-lime-400 text-gray-50 dark:text-gray-900"
-                onClick={() => {
-                  signOut();
-                }}
-              >
-                <svg
-                  stroke="currentColor"
-                  fill="currentColor"
-                  strokeWidth="0"
-                  version="1.1"
-                  x="0px"
-                  y="0px"
-                  viewBox="0 0 48 48"
-                  enableBackground="new 0 0 48 48"
-                  className="h-6 w-6 mr-[8px]"
-                  height="1em"
-                  width="1em"
-                  xmlns="http://www.w3.org/2000/svg"
+              <div className="flex items-center">
+                <div className="flex flex-row">
+                  <img
+                    className="flex-shrink-0 object-cover mx-1 rounded-full w-9 h-9"
+                    src={session?.user?.image as string}
+                    alt="avatar"
+                  />
+                  <div className="mx-1">
+                    <h1 className="text-sm font-semibold text-gray-700 dark:text-gray-200">
+                      {session?.user?.name}
+                    </h1>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      {session?.user?.email}
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  rel="noopener noreferrer"
+                  className="px-4 py-3 text-lg ml-3 font-semibold rounded bg-lime-600 text-gray-50"
+                  onClick={() => {
+                    signOut();
+                  }}
                 >
-                  <path
-                    fill="#FFC107"
-                    d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12
-	c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24
-	c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"
-                  ></path>
-                  <path
-                    fill="#FF3D00"
-                    d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657
-	C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"
-                  ></path>
-                  <path
-                    fill="#4CAF50"
-                    d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36
-	c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"
-                  ></path>
-                  <path
-                    fill="#1976D2"
-                    d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571
-	c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"
-                  ></path>
-                </svg>
-                Sign out
-              </button>
+                  <LogOut strokeWidth={2} />
+                </button>
+              </div>
             )}
           </div>
           <div className="relative inline-block lg:hidden">
@@ -237,15 +221,15 @@ export default function Navbar({ currentPage }: { currentPage: string }) {
                     >
                       <img
                         className="flex-shrink-0 object-cover mx-1 rounded-full w-9 h-9"
-                        src="https://images.unsplash.com/photo-1523779917675-b6ed3a42a561?ixid=MnwxMjA3fDB8MHxzZWFyY2h8N3x8d29tYW4lMjBibHVlfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=face&w=500&q=200"
-                        alt="jane avatar"
+                        src={session?.user?.image as string}
+                        alt="avatar"
                       />
                       <div className="mx-1">
                         <h1 className="text-sm font-semibold text-gray-700 dark:text-gray-200">
-                          Jane Doe
+                          {session?.user?.name}
                         </h1>
                         <p className="text-sm text-gray-500 dark:text-gray-400">
-                          janedoe@exampl.com
+                          {session?.user?.email}
                         </p>
                       </div>
                     </a>
