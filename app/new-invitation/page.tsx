@@ -1,33 +1,74 @@
 "use client";
 
-import Navbar from "../components/Navbar";
-
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { doc, getFirestore, setDoc } from "firebase/firestore";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
 import SportsList from "../data/SportsList";
 import app from "@/lib/firebaseConfig";
+import resizeImage from "@/lib/resizeImage";
+import compressImage from "@/lib/compressImage";
+import Navbar from "../components/Navbar";
 
 export default function NewInvitation() {
   const router = useRouter();
   const { data: session } = useSession();
   const db = getFirestore(app);
 
-  const [submitData, setSubmitData] = useState<SubmitData>({});
+  const [submitData, setSubmitData] = useState<SubmitData | null>({
+    userName: "",
+    email: "",
+    image: "",
+    invitationImage: "",
+  });
+  const [invitationImage, setInvitationImage] = useState<File | null>(null);
 
   interface SubmitData {
     [key: string]: any;
     userName?: string;
     email?: string;
     image?: string;
+    invitationImage?: string;
   }
 
-  const handleSubmit = (e: any) => {
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      setInvitationImage(event.target.files[0]);
+    }
+  };
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setDoc(doc(db, "invitations", Date.now().toString()), submitData);
-    router.push("/");
+    if (invitationImage) {
+      try {
+        const resizedImage = await resizeImage(invitationImage, 180);
+        const compressedImage = await compressImage(resizedImage, 1);
+        const storage = getStorage();
+        const storageRef = ref(
+          storage,
+          `sports-partner/${compressedImage.name}`
+        );
+        const snapshot = await uploadBytes(storageRef, compressedImage);
+        const url = await getDownloadURL(snapshot.ref);
+        setSubmitData((prevValues) => ({
+          ...prevValues,
+          invitationImage: url,
+        }));
+        if (submitData?.invitationImage) {
+          console.log(submitData);
+          await setDoc(
+            doc(db, "invitations", Date.now().toString()),
+            submitData
+          );
+          router.push("/");
+        }
+      } catch (error) {
+        console.error("Error processing file:", error);
+      }
+    } else {
+      console.error("No file selected for upload.");
+    }
   };
   const handleChange = (e: any) => {
     const name = e.target.name;
@@ -39,7 +80,9 @@ export default function NewInvitation() {
   };
 
   useEffect(() => {
-    if (!session) router.push("/");
+    if (!session) {
+      router.push("/");
+    }
     setSubmitData((prevValues) => ({
       ...prevValues,
       userName: session?.user?.name,
@@ -52,8 +95,6 @@ export default function NewInvitation() {
       <Navbar currentPage="" />
       <section className="p-6 bg-gray-100 text-gray-900">
         <form
-          noValidate
-          action=""
           className="container flex flex-col mx-auto space-y-12"
           onSubmit={handleSubmit}
         >
@@ -182,9 +223,19 @@ export default function NewInvitation() {
                   className="w-full rounded-md focus:ring focus:ring-opacity-75 text-gray-900 focus:ring-lime-600 border-gray-300"
                 ></textarea>
               </div>
+              {/* image */}
+              <div>
+                <input
+                  type="file"
+                  name="invitation-image"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                />
+              </div>
               <div className="col-span-full">
                 <button
                   rel="noopener noreferrer"
+                  type="submit"
                   className="px-8 py-3 text-lg font-semibold rounded bg-lime-600 text-gray-50"
                 >
                   Submit

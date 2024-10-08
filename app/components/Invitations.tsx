@@ -64,7 +64,7 @@ export default function Invitations({
                 <img
                   alt=""
                   className="object-cover w-full h-52 bg-gray-500"
-                  src="https://source.unsplash.com/200x200/?fashion?1"
+                  src={item.invitationImage}
                 />
               </a>
               <div className="flex flex-col flex-1 p-6">
@@ -100,8 +100,6 @@ export default function Invitations({
                     {item.zip}
                   </span>
                 </div>
-
-                {/* modal */}
                 <InvitationModal item={item} />
               </div>
             </article>

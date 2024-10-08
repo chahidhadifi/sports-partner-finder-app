@@ -5,6 +5,7 @@ import Link from "next/link";
 
 import { useSession, signIn, signOut } from "next-auth/react";
 import { LogOut } from "lucide-react";
+import Image from "next/image";
 
 export default function Navbar({ currentPage }: { currentPage: string }) {
   const { data: session } = useSession();
@@ -135,9 +136,16 @@ export default function Navbar({ currentPage }: { currentPage: string }) {
                 <div className="flex flex-row">
                   <img
                     className="flex-shrink-0 object-cover mx-1 rounded-full w-9 h-9"
-                    src={session?.user?.image as string}
+                    src={session?.user?.image + ""}
                     alt="avatar"
                   />
+                  {/* <Image
+                    src={session?.user?.image + ""}
+                    alt="avatar"
+                    width={50}
+                    height={50}
+                    className="flex-shrink-0 object-cover mx-1 rounded-full w-9 h-9"
+                  ></Image> */}
                   <div className="mx-1">
                     <h1 className="text-sm font-semibold text-gray-700 dark:text-gray-200">
                       {session?.user?.name}
