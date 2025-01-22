@@ -133,28 +133,30 @@ export default function Navbar({ currentPage }: { currentPage: string }) {
               </button>
             ) : (
               <div className="flex items-center">
-                <div className="flex flex-row">
-                  <img
-                    className="flex-shrink-0 object-cover mx-1 rounded-full w-9 h-9"
-                    src={session?.user?.image + ""}
-                    alt="avatar"
-                  />
-                  {/* <Image
+                <Link href={"/profile"}>
+                  <div className="flex flex-row">
+                    <img
+                      className="flex-shrink-0 object-cover mx-1 rounded-full w-9 h-9"
+                      src={session?.user?.image + ""}
+                      alt="avatar"
+                    />
+                    {/* <Image
                     src={session?.user?.image + ""}
                     alt="avatar"
                     width={50}
                     height={50}
                     className="flex-shrink-0 object-cover mx-1 rounded-full w-9 h-9"
                   ></Image> */}
-                  <div className="mx-1">
-                    <h1 className="text-sm font-semibold text-gray-700 dark:text-gray-200">
-                      {session?.user?.name}
-                    </h1>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                      {session?.user?.email}
-                    </p>
+                    <div className="mx-1">
+                      <h1 className="text-sm font-semibold text-gray-700 dark:text-gray-200">
+                        {session?.user?.name}
+                      </h1>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                        {session?.user?.email}
+                      </p>
+                    </div>
                   </div>
-                </div>
+                </Link>
 
                 <button
                   rel="noopener noreferrer"
@@ -223,8 +225,8 @@ export default function Navbar({ currentPage }: { currentPage: string }) {
                   </div>
                 ) : (
                   <div>
-                    <a
-                      href="#"
+                    <Link
+                      href="/profile"
                       className="flex items-center p-3 -mt-2 text-sm text-gray-600 transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
                     >
                       <img
@@ -240,7 +242,7 @@ export default function Navbar({ currentPage }: { currentPage: string }) {
                           {session?.user?.email}
                         </p>
                       </div>
-                    </a>
+                    </Link>
 
                     <hr className="border-gray-200 dark:border-gray-700 "></hr>
                     <a
